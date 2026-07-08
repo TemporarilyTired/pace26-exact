@@ -75,13 +75,13 @@ fn solve_split_with_dummy(
     (above_with_dummy, used_dummy_above): (Instance, Label),
     (below_with_dummy, used_dummy_below): (Instance, Label),
 ) -> ArenaTree {
-    let a_dummy = solve(above_with_dummy);
+    let mut a_dummy = solve(above_with_dummy);
     if a_dummy
         .get(a_dummy.locate_label(used_dummy_above))
         .parent
         .is_some()
     {
-        let b_dummy = solve(below_with_dummy);
+        let mut b_dummy = solve(below_with_dummy);
         if b_dummy
             .get(b_dummy.locate_label(used_dummy_below))
             .parent
@@ -126,9 +126,14 @@ fn solve_split_with_dummy(
             }
             return a.join_with(b);
         }
+        // b_dummy contains an optimal solution for below
+        b_dummy.remove_svt(used_dummy_below);
+        let a = solve(above);
+        return a.join_with(b_dummy);
     }
 
-    let a = solve(above);
+    // a_dummy contains an optimal solution for above
+    a_dummy.remove_svt(used_dummy_above);
     let b = solve(below);
-    a.join_with(b)
+    a_dummy.join_with(b)
 }
