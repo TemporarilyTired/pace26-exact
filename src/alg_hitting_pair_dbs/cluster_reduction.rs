@@ -13,12 +13,10 @@ use crate::maf_instance::{
 // Try to find an agreement forest of clusters a and b s.t. ord(a)+ord(b) <= k
 // Otherwise returns None
 pub fn solve_split(cluster_a: State, cluster_b: State, k: usize) -> Option<(ArenaTree, ArenaTree)> {
-    let ord_a = cluster_a.instance.ord();
-    let svt_cuts_lb_a = cluster_a.get_matching_lb();
-    let lb1_a = ord_a + svt_cuts_lb_a.div_ceil(2);
-    let lb2_a = svt_cuts_lb_a;
-    let (_, lb3_a) = calc_expensive_lb_and_ub(cluster_a.clone());
-    let remaining_k_for_b = k.checked_sub(lb1_a.max(lb2_a).max(lb3_a))?;
+    // NOTE: post-submission bug-fix:
+    // Removed call to `cluster_a.get_matching_lb()` and its resulting lower bounds
+    let (_, lb_a) = calc_expensive_lb_and_ub(cluster_a.clone());
+    let remaining_k_for_b = k.checked_sub(lb_a)?;
 
     let mut sol_b = cherry_dbs(cluster_b.clone(), remaining_k_for_b, false)?;
     let mut ub_b = sol_b.ord();
