@@ -6,7 +6,7 @@ This repository is a submission to PACE 26 (See https://pacechallenge.org/2026/ 
 
 ## Installation
 
-The solver has been tested on Debian 13.5. The following assumes Debian 13.5, but should be easily translate to any operating system.
+The solver has been tested on Debian 13.5. The following assumes Debian 13.5, but should be easily translated to any operating system.
 
 ### Build prerequisites
 
